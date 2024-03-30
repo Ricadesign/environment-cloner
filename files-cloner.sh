@@ -10,7 +10,19 @@ fi
 CSV_FILE="data.csv"
 connection_string="$1"
 
-read -r name source_server source_user source_path destination_server destination_user destination_path <<< $(./data-reader.sh "$CSV_FILE" "$connection_string")
+# Invoke the data-reader script to get connection data
+connection_data=$(./data-reader.sh "$CSV_FILE" "$connection_string")
+
+# Check if connection data was found
+if [ $? -ne 0 ]; then
+    echo "Error: Unable to retrieve connection data."
+    echo "Connections available:"
+    awk -F ',' 'NR>1 {print $1}' "$CSV_FILE"
+    exit 1
+fi
+
+# Read connection data from the output of the data-reader script
+read -r name source_server source_user source_path destination_server destination_user destination_path <<< "$connection_data"
 
 # Copy files from the source server to the local folder
 echo "Copying files from $source_path on $source_server to ./copy..."

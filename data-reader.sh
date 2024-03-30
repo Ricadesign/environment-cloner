@@ -15,7 +15,6 @@ connection_data=$(grep "$connection_string" "$CSV_FILE")
 
 # Check if connection data was found
 if [ -z "$connection_data" ]; then
-    echo "Error: No connection data found for the provided string."
     exit 1
 fi
 
