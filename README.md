@@ -1,29 +1,37 @@
-## File Cloning Script
+## Environment Cloner
 
-This Bash script facilitates the cloning of files between two servers based on a provided connection string.
+This repository contains scripts to facilitate the cloning of files and databases between servers. The main script orchestrates the execution of two sub-scripts: one for cloning files and another for cloning databases.
+
+## Prerequisites
+
+Before running the scripts, ensure that you have the following prerequisites:
+
+- SSH access to both source and destination servers.
+- Proper permissions to execute the script.
+```bash
+chmod +x clone-wrapper.sh
+```
+- Properly formatted `data.csv` file containing connection details
 
 ### Usage
 
 ```bash
-./clone_files.sh <connection_string>
+./clone-wrapper.sh <connection_string>
 ```
 
 ### Description
 
-The script takes a single argument, `<connection_string>`, which represents the identifier for the desired connection details. It retrieves the necessary connection information from a CSV file (`data.csv`) using a helper script (`data-reader.sh`). The connection details include source and destination server addresses, user credentials, and file paths.
+The clonse-wrapper.sh script orchestrates the cloning process by invoking the file-cloner.sh and db-cloner.sh scripts. It takes a connection string as an argument, retrieves connection data using a data-reader script, and then executes the file cloning and database cloning scripts with the appropriate parameters.
 
-After validating the provided argument, the script proceeds to copy files from the source server to a local folder (`./copy`). It then clones these files from the local folder to the destination server. Upon successful completion, the local copy is removed.
+The file-cloner.sh script is responsible for cloning files between servers. It requires the source server, source user, source path, destination server, destination user, and destination path as arguments. It creates a backup directory on the destination server, copies files from the source server to a local folder, and then clones the files from the local folder to the destination server.
+
+The db-cloner.sh script is responsible for cloning databases between servers. It requires the source server, source user, source password, source database, destination server, destination user, destination password, and destination database as arguments. It exports the database from the source server, copies the database dump to the destination server, imports the database dump into the destination database, and then removes the database dump files from both servers.
 
 ### Example
 
 ```bash
-./clone_files.sh my_connection
+./clone-wrapper.sh my_connection
 ```
-
-### Requirements
-
-- Bash shell
-- Properly formatted `data.csv` file containing connection details
 
 ## Disclaimer
 
