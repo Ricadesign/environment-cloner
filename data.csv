@@ -1,1 +1,1 @@
-name,source_server,source_user,source_path,destination_server,destination_user,destination_path
+name,source_server,source_user,source_password,source_database, source_path,destination_server,destination_user, destination_password, destination_database, destination_path
