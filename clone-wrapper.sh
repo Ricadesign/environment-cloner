@@ -22,6 +22,8 @@ fi
 # Read connection data from the output of the data-reader script
 read -r name source_server source_user source_password source_database source_path destination_server destination_user destination_password destination_database destination_path <<< "$connection_data"
 
+chmod +x file-cloner.sh db-cloner.sh
+
 # Execute the first script to export and import the database
 ./file-cloner.sh "$source_server" "$source_user" "$source_path" "$destination_server" "$destination_user" "$destination_path"
 
