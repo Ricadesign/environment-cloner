@@ -1,26 +1,20 @@
 #!/bin/bash
 
 # Verify if the correct argument was passed
-if [ "$#" -ne 1 ]; then
-    echo "Usage: $0 <connection_string>"
+if [ "$#" -ne 8 ]; then
+    echo "Usage: $0 <source_server> <source_user> <source_password> <source_database> <destination_server> <destination_user> <destination_password> <destination_database>"
     exit 1
 fi
 
 # Assign the arguments to variables
-connection_string="$1"
-
-# Invoke the data-reader script to get connection data
-connection_data=$(./data-reader.sh "$connection_string")
-
-# Check if connection data was found
-if [ $? -ne 0 ]; then
-    echo "Error: Unable to retrieve connection data."
-    echo $connection_data
-    exit 1
-fi
-
-# Read connection data from the output of the data-reader script
-read -r name source_server source_user source_password source_database source_path destination_server destination_user destination_password destination_database destination_path <<< "$connection_data"
+source_server="$1"
+source_user="$2"
+source_password="$3"
+source_database="$4"
+destination_server="$5"
+destination_user="$6"
+destination_password="$7"
+destination_database="$8"
 
 # Export database from source server
 echo "Exporting database from $source_database on $source_server..."
