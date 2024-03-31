@@ -24,6 +24,16 @@ fi
 # Read connection data from the output of the data-reader script
 read -r name source_server source_user source_path destination_server destination_user destination_path <<< "$connection_data"
 
+# Create a backup directory on the destination server
+echo "Creating backup directory on $destination_server..."
+ssh "$destination_user@$destination_server" "cp -r $destination_path $destination_path/../public_backup"
+
+# Check the status of creating the backup directory
+if [ $? -ne 0 ]; then
+    echo "Error: Unable to create backup directory on $destination_server."
+    exit 1
+fi
+
 # Copy files from the source server to the local folder
 echo "Copying files from $source_path on $source_server to ./copy..."
 rsync -avz -e ssh "$source_user@$source_server:$source_path/" "./copy/"
