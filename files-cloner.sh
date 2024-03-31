@@ -7,22 +7,20 @@ if [ "$#" -ne 1 ]; then
 fi
 
 # Assign the arguments to variables
-CSV_FILE="data.csv"
 connection_string="$1"
 
 # Invoke the data-reader script to get connection data
-connection_data=$(./data-reader.sh "$CSV_FILE" "$connection_string")
+connection_data=$(./data-reader.sh "$connection_string")
 
 # Check if connection data was found
 if [ $? -ne 0 ]; then
     echo "Error: Unable to retrieve connection data."
-    echo "Connections available:"
-    awk -F ',' 'NR>1 {print $1}' "$CSV_FILE"
+    echo $connection_data
     exit 1
 fi
 
 # Read connection data from the output of the data-reader script
-read -r name source_server source_user source_path destination_server destination_user destination_path <<< "$connection_data"
+read -r name source_server source_user source_password source_database source_path destination_server destination_user destination_password destination_database destination_path <<< "$connection_data"
 
 # Create a backup directory on the destination server
 echo "Creating backup directory on $destination_server..."
