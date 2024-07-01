@@ -16,7 +16,12 @@ destination_path="$6"
 
 # Create a backup directory on the destination server
 echo "Creating backup directory on $destination_server..."
-ssh "$destination_user@$destination_server" "cp -r $destination_path $destination_path/../public_backup"
+echo $destination_path
+
+# Ensure there are no carriage return characters
+destination_path=$(echo $destination_path | tr -d '\r')
+
+ssh "$destination_user@$destination_server" "cp -r "$destination_path" $destination_path/../public_backup"
 
 # Check the status of creating the backup directory
 if [ $? -ne 0 ]; then
